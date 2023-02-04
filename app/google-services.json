@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "949935510089",
+    "project_id": "notesapp-c783d",
+    "storage_bucket": "notesapp-c783d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949935510089:android:96d9ae850cd65c5a276598",
+        "android_client_info": {
+          "package_name": "com.ted.roomwordssample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "949935510089-t6gju37vu4esv1hktobmhjet7nbipiah.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ted.roomwordssample",
+            "certificate_hash": "482469899e49931a56e1153c814589efa4704ade"
+          }
+        },
+        {
+          "client_id": "949935510089-l9rqhijecf159j6bnla2ogk1fv73ajer.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB82p4_6_NW2wgTWDZFLewMsxrQuR4OMH4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "949935510089-l9rqhijecf159j6bnla2ogk1fv73ajer.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

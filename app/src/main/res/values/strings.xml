@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">RoomWordsSample</string>
+    <string name="add_word">Add Word</string>
+    <string name="input_word">Input Word</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="show_password">Show Password</string>
+    <string name="create_account_text">Create Account</string>
+    <string name="no_account_text">Dont\'t have an account?  </string>
+    <string name="have_account_text">Already have an account?  </string>
+
+</resources>
