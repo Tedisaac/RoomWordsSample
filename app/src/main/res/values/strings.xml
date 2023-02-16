@@ -11,5 +11,7 @@
     <string name="create_account_text">Create Account</string>
     <string name="no_account_text">Dont\'t have an account?  </string>
     <string name="have_account_text">Already have an account?  </string>
+    <string name="txt_dialog_no">No</string>
+    <string name="txt_dialog_yes">Yes</string>
 
 </resources>

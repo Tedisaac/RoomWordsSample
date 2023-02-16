@@ -1,8 +1,10 @@
 package com.ted.roomwordssample
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.ted.roomwordssample.databinding.ActivitySignInBinding
@@ -16,7 +18,7 @@ import com.ted.roomwordssample.viewmodels.ResponseState
 class SignInActivity : AppCompatActivity() {
 
     private lateinit var signInBinding: ActivitySignInBinding
-    val authViewModel: AuthenticationViewModel by lazy {
+    private val authViewModel: AuthenticationViewModel by lazy {
         ViewModelProvider(
             this,
             AuthenticationViewModelFactory(
@@ -38,6 +40,7 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun validateData() {
+        CustomAlertDialog.showLoadingDialog(this)
         val email = signInBinding.edSignInEmail.text.toString()
         val password = signInBinding.edSignInPassword.text.toString()
 
@@ -49,12 +52,15 @@ class SignInActivity : AppCompatActivity() {
 
            authViewModel.signInWithFirebase(email, password)
             authViewModel.authenticatedUserLiveData.observe(this) { authenticatedUser ->
+                Log.e(TAG, "validateData: $authenticatedUser")
                 when (authenticatedUser) {
                     is ResponseState.Success -> {
+                        Log.e(TAG, "validateData: ${authenticatedUser.data}")
                         CustomAlertDialog.dismissLoadingDialog()
                         switchToMainScreen()
                     }
                     is ResponseState.Error -> {
+                        CustomAlertDialog.dismissLoadingDialog()
                         authenticatedUser.message.let {
                             Snackbar.make(this, signInBinding.root, it.toString(), Snackbar.LENGTH_SHORT).show()
                         }

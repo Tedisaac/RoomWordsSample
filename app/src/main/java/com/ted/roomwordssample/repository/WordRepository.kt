@@ -23,7 +23,7 @@ class WordRepository(private val wordRoomDatabase: WordRoomDatabase) : AuthInter
 
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    override fun signUpWithFirebase(email: String, password: String) : MutableLiveData<ResponseState<User>> {
+    override suspend fun signUpWithFirebase(email: String, password: String) : MutableLiveData<ResponseState<User>> {
         val authenticatedUser: MutableLiveData<ResponseState<User>> = MutableLiveData()
 
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{ task->
@@ -47,7 +47,7 @@ class WordRepository(private val wordRoomDatabase: WordRoomDatabase) : AuthInter
         return authenticatedUser
     }
 
-    override fun signInWithFirebase(email: String, password: String) : MutableLiveData<ResponseState<User>> {
+    override suspend fun signInWithFirebase(email: String, password: String) : MutableLiveData<ResponseState<User>> {
         val authenticatedUser: MutableLiveData<ResponseState<User>> = MutableLiveData()
 
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener{ task->
@@ -69,6 +69,10 @@ class WordRepository(private val wordRoomDatabase: WordRoomDatabase) : AuthInter
             }
         }
         return authenticatedUser
+    }
+
+    override fun signOutUser() {
+        firebaseAuth.signOut()
     }
 
 }

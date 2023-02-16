@@ -1,23 +1,35 @@
 package com.ted.roomwordssample.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import android.content.ContentValues.TAG
+import android.util.Log
+import androidx.lifecycle.*
 import com.ted.roomwordssample.models.User
 import com.ted.roomwordssample.repository.WordRepository
+import kotlinx.coroutines.launch
 
 class AuthenticationViewModel constructor(private val wordRepository: WordRepository): ViewModel() {
 
     private var _authenticatedUserLiveData:  MutableLiveData<ResponseState<User>> = MutableLiveData()
-    var authenticatedUserLiveData: LiveData<ResponseState<User>> = _authenticatedUserLiveData
+    val authenticatedUserLiveData: LiveData<ResponseState<User>>
+    get() = _authenticatedUserLiveData
 
     fun signInWithFirebase(email: String, password: String){
-        _authenticatedUserLiveData = wordRepository.signInWithFirebase(email, password)
+        viewModelScope.launch {
+            _authenticatedUserLiveData = wordRepository.signInWithFirebase(email, password)
+            Log.e(TAG, "signInWithFirebase: ${_authenticatedUserLiveData.value}")
+        }
+
     }
 
     fun signUpWithFirebase(email: String, password: String){
-        _authenticatedUserLiveData = wordRepository.signUpWithFirebase(email, password)
+        viewModelScope.launch {
+            _authenticatedUserLiveData = wordRepository.signUpWithFirebase(email, password)
+        }
+
+    }
+
+    fun signOutUser(){
+        wordRepository.signOutUser()
     }
 }
 

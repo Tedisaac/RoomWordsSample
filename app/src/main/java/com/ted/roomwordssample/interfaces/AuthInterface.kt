@@ -6,7 +6,9 @@ import com.ted.roomwordssample.viewmodels.ResponseState
 
 interface AuthInterface {
 
-    fun signUpWithFirebase(email: String, password: String) : MutableLiveData<ResponseState<User>>
+    suspend fun signUpWithFirebase(email: String, password: String) : MutableLiveData<ResponseState<User>>
 
-    fun signInWithFirebase(email: String, password: String) : MutableLiveData<ResponseState<User>>
+    suspend fun signInWithFirebase(email: String, password: String) : MutableLiveData<ResponseState<User>>
+
+    fun signOutUser()
 }

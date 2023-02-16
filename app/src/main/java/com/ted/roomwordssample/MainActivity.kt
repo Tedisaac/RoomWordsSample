@@ -12,6 +12,9 @@ import com.ted.roomwordssample.adapters.RemoveWordInterface
 import com.ted.roomwordssample.databinding.ActivityMainBinding
 import com.ted.roomwordssample.models.WordRoomDatabase
 import com.ted.roomwordssample.repository.WordRepository
+import com.ted.roomwordssample.utils.CustomAlertDialog
+import com.ted.roomwordssample.viewmodels.AuthenticationViewModel
+import com.ted.roomwordssample.viewmodels.AuthenticationViewModelFactory
 import com.ted.roomwordssample.viewmodels.ViewModelFactory
 import com.ted.roomwordssample.viewmodels.WordViewModel
 
@@ -30,6 +33,17 @@ class MainActivity : AppCompatActivity(), RemoveWordInterface {
         )[WordViewModel::class.java]
     }
 
+    private val authViewModel: AuthenticationViewModel by lazy {
+        ViewModelProvider(
+            this,
+            AuthenticationViewModelFactory(
+                WordRepository(
+                    WordRoomDatabase.getDatabase(this)
+                )
+            )
+        )[AuthenticationViewModel::class.java]
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
@@ -38,9 +52,31 @@ class MainActivity : AppCompatActivity(), RemoveWordInterface {
         setContentView(binding.root)
 
         binding.fabAddWord.setOnClickListener { switchToAddWordScreen() }
+        binding.fabSignOut.setOnClickListener { signOutUser() }
 
         setUpRecyclerView()
 
+    }
+
+    private fun signOutUser() {
+        val title = "Alert!!"
+        val message = "Are you sure you want to sign out?"
+        CustomAlertDialog.showConfirmDialog(
+            this,
+            title,
+            message,
+            { onDialogYesClicked() },
+            { onDialogNoClicked() })
+    }
+
+    private fun onDialogYesClicked() {
+        authViewModel.signOutUser()
+        CustomAlertDialog.dismissLoadingDialog()
+        switchToSignInScreen()
+    }
+
+    private fun onDialogNoClicked() {
+        CustomAlertDialog.dismissLoadingDialog()
     }
 
     private fun setUpRecyclerView() {
@@ -51,7 +87,7 @@ class MainActivity : AppCompatActivity(), RemoveWordInterface {
     }
 
     private fun fetchWords() {
-        wordViewModel.allWords.observe(this){ result ->
+        wordViewModel.allWords.observe(this) { result ->
             adapter = AddWordAdapter(result)
             adapter.onWordSelected(this)
             binding.rvWords.adapter = adapter
@@ -61,6 +97,11 @@ class MainActivity : AppCompatActivity(), RemoveWordInterface {
 
     private fun switchToAddWordScreen() {
         startActivity(Intent(this, AddWordActivity::class.java))
+        finish()
+    }
+
+    private fun switchToSignInScreen() {
+        startActivity(Intent(this, SignInActivity::class.java))
         finish()
     }
 

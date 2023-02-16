@@ -43,6 +43,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun validateData() {
+        CustomAlertDialog.showLoadingDialog(this)
         val email = signUpBinding.edSignUpEmail.text.toString()
         val password = signUpBinding.edSignUpPassword.text.toString()
         val confirmPassword = signUpBinding.edSignUpConfirmPassword.text.toString()
