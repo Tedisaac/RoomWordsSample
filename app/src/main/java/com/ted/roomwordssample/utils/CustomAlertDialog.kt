@@ -13,7 +13,7 @@ object CustomAlertDialog {
         loadingdialog.setContentView(R.layout.dialog_layout)
         loadingdialog.setCancelable(true)
         val width = (context.resources.displayMetrics.widthPixels * 0.80).toInt()
-        val height = (context.resources.displayMetrics.heightPixels * 0.60).toInt()
+        val height = (context.resources.displayMetrics.heightPixels * 0.18).toInt()
         loadingdialog.window!!.setLayout(width, height)
         loadingdialog.create()
         loadingdialog.show()
@@ -41,7 +41,7 @@ object CustomAlertDialog {
         no.setOnClickListener { onNoClicked() }
 
         val width = (context.resources.displayMetrics.widthPixels * 0.80).toInt()
-        val height = (context.resources.displayMetrics.heightPixels * 0.60).toInt()
+        val height = (context.resources.displayMetrics.heightPixels * 0.18).toInt()
         loadingdialog.window!!.setLayout(width, height)
 
         loadingdialog.create()

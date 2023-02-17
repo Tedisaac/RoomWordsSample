@@ -3,6 +3,7 @@ package com.ted.roomwordssample
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
@@ -36,6 +37,8 @@ class AddWordActivity : AppCompatActivity() {
     }
 
     private fun validateWord() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(addWordBinding.root.windowToken, 0)
         if (addWordBinding.edWord.text.isEmpty()){
             Snackbar.make(this, addWordBinding.root, "Please input word", Snackbar.LENGTH_SHORT).show()
         }else{

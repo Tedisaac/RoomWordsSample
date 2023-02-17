@@ -2,9 +2,12 @@ package com.ted.roomwordssample
 
 import android.content.ContentValues.TAG
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.ted.roomwordssample.databinding.ActivitySignInBinding
@@ -28,6 +31,7 @@ class SignInActivity : AppCompatActivity() {
             )
         )[AuthenticationViewModel::class.java]
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,21 +40,34 @@ class SignInActivity : AppCompatActivity() {
 
         signInBinding.btnSignIn.setOnClickListener { validateData() }
         signInBinding.txtCreateAccount.setOnClickListener { switchToSignUpScreen() }
+        signInBinding.cbSignInShowPassword.setOnCheckedChangeListener{ _, isChecked ->
+            showPassword(isChecked)
+        }
 
     }
 
+    private fun showPassword(checked: Boolean) {
+        if (checked){
+            signInBinding.edSignInPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+            signInBinding.edSignInPassword.setSelection(signInBinding.edSignInPassword.length())
+        }else{
+            signInBinding.edSignInPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+            signInBinding.edSignInPassword.setSelection(signInBinding.edSignInPassword.length())
+        }
+    }
+
     private fun validateData() {
-        CustomAlertDialog.showLoadingDialog(this)
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(signInBinding.root.windowToken, 0)
         val email = signInBinding.edSignInEmail.text.toString()
         val password = signInBinding.edSignInPassword.text.toString()
-
-        if (email.isEmpty()){
-            Snackbar.make(this, signInBinding.root, "Please input email", Snackbar.LENGTH_SHORT)
-        }else if (password.isEmpty()){
-            Snackbar.make(this, signInBinding.root, "Please input password", Snackbar.LENGTH_SHORT)
-        }else{
-
-           authViewModel.signInWithFirebase(email, password)
+        if (signInBinding.edSignInEmail.text.isEmpty()) {
+            Snackbar.make(this, signInBinding.root, "Please input email", Snackbar.LENGTH_SHORT).show()
+        } else if (signInBinding.edSignInPassword.text.isEmpty()) {
+            Snackbar.make(this, signInBinding.root, "Please input password", Snackbar.LENGTH_SHORT).show()
+        } else {
+            CustomAlertDialog.showLoadingDialog(this)
+            authViewModel.signInWithFirebase(email, password)
             authViewModel.authenticatedUserLiveData.observe(this) { authenticatedUser ->
                 Log.e(TAG, "validateData: $authenticatedUser")
                 when (authenticatedUser) {
@@ -62,7 +79,12 @@ class SignInActivity : AppCompatActivity() {
                     is ResponseState.Error -> {
                         CustomAlertDialog.dismissLoadingDialog()
                         authenticatedUser.message.let {
-                            Snackbar.make(this, signInBinding.root, it.toString(), Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(
+                                this,
+                                signInBinding.root,
+                                it.toString(),
+                                Snackbar.LENGTH_SHORT
+                            ).show()
                         }
                     }
                     is ResponseState.Loading -> {
